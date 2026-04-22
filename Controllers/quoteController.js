@@ -151,11 +151,11 @@ module.exports.createQuoteCtrl = asyncHandler(async (req, res) => {
   try {
     const quote = await Quote.create(value);
 
-    // try {
-    //   await sendNewQuoteNotification(quote);
-    // } catch (e) {
-    //   console.error('Erreur email:', e);
-    // }
+    try {
+      await sendNewQuoteNotification(quote);
+    } catch (e) {
+      console.error('Erreur email:', e);
+    }
 
     res.status(201).json({
       message: 'Devis créé avec succès',

@@ -2,12 +2,12 @@ const nodemailer = require("nodemailer");
 
 // Configuration du transporteur (à mettre dans .env)
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || "smtp.gmail.com",
-  port: process.env.SMTP_PORT || 465,
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
   secure: true, // true pour 465, false pour 587
   auth: {
-    user: process.env.SMTP_USER || "wahbisj@gmail.com",
-    pass: process.env.SMTP_PASS || "bvqwwgmqtaxhabax",
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
   },
 });
 
@@ -58,7 +58,7 @@ const sendNewQuoteNotification = async (quote) => {
     throw new Error('ADMIN_EMAIL non défini dans .env');
   }
 
-  const dashboardBaseUrl = process.env.ADMIN_DASHBOARD_URL || 'http://localhost:3001/dashboard/website';
+  const dashboardBaseUrl = process.env.ADMIN_DASHBOARD_URL;
   const quoteLink = `${dashboardBaseUrl}`;
 
   const subject = `Nouveau devis de ${quote.firstName} ${quote.lastName}`;
