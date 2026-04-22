@@ -3,7 +3,7 @@ const {
   registerEmailCtrl,
   getAllEmailsCtrl,
   deleteEmailCtrl
-} = require('../../controllers/GestionWebSiteSections/EmailListController');
+} = require('../../Controllers/GestionWebSiteSections/EmailListController');
 
 const router = express.Router();
 

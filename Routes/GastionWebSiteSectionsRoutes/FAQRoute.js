@@ -6,7 +6,7 @@ const {
   updateFaqCtrl,
   deleteFaqCtrl,
   createManyFQA,
-} = require('../../controllers/GestionWebSiteSections/FAQController');
+} = require('../../Controllers/GestionWebSiteSections/FAQController');
 
 const router = express.Router();
 
