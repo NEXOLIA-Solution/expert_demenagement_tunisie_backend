@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const { User, registerVerify, loginVerify } = require("../Models/userModel");
+const { User, registerVerify, loginVerify,updateVerify } = require("../Models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config()
@@ -63,6 +63,7 @@ module.exports.registerCtel = asyncHandler(async (req, res) => {
     name: req.body.name,
     email: req.body.email,
     password: hashedPassword,
+    role: req.body.role
   });
   await newUser.save();
 
@@ -221,12 +222,13 @@ module.exports.verifyCodeCtrl = asyncHandler(async (req, res) => {
   }
 
   // Code correct → générer le token JWT
-  const user = await User.findOne({ email });
-  const token = jwt.sign(
-    { id: user._id, name: user.name },
-    Token_Secret,
-    { expiresIn: "8h" }
-  );
+ // Trouvez la section correspondante dans verifyCodeCtrl et modifiez-la ainsi :
+const user = await User.findOne({ email });
+const token = jwt.sign(
+  { id: user._id, name: user.name, role: user.role }, // <-- Injection du rôle ici
+  Token_Secret,
+  { expiresIn: "8h" }
+);
 
   // Supprimer le code après vérification
   verificationCodes.delete(email);
@@ -238,6 +240,20 @@ module.exports.verifyCodeCtrl = asyncHandler(async (req, res) => {
     token,
   });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

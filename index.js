@@ -34,6 +34,7 @@ app.use(cors({
   origin: [ "http://localhost:3000","http://localhost:3001",'https://nexolia-medica-landing-page.vercel.app',"http://localhost:2000","https://www.expert-demenagement-tunisie.com","https://ala.expert-demenagement-tunisie.com"],
   methods: ['GET', 'POST','DELETE',"PUT","PATCH"],
   allowedHeaders: ['Content-Type'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 
