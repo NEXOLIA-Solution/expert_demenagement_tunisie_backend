@@ -3,22 +3,22 @@ const app = express();
 const cors = require('cors');
 require("./Config/DBConnect")
 
-
+const { getDBStatus } = require("./Config/DBConnect");
 
 // Imported Routes Nexolia-Medica :
 const authRoute = require("./Routes/authRoute");
-const visitorRoute = require("./Routes/visitorRoute");
-const partnersRoute = require("./Routes/GastionWebSiteSectionsRoutes/PartnerRoute");
-const videoRoute = require("./Routes/GastionWebSiteSectionsRoutes/VideoRoute");
-const faqRoute = require('./Routes/GastionWebSiteSectionsRoutes/FAQRoute');
-const serviceRoute = require("./Routes/GastionWebSiteSectionsRoutes/ServiceRoute");
-const reviewRoute = require("./Routes/GastionWebSiteSectionsRoutes/ReviewRoute");
-const emailListRoute = require('./Routes/GastionWebSiteSectionsRoutes/EmailListRoute');
-const quoteRoute = require("./Routes/quoteRoute"); // <-- à ajouter
-const companyRoute = require("./Routes/companyRoute");
-const galleryRoute = require("./Routes/GastionWebSiteSectionsRoutes/galleryRoute");
-const newsRoute = require("./Routes/newsRoute");
-const factureRoute = require ("./Routes/FactureRoute")
+// const visitorRoute = require("./Routes/visitorRoute");
+// const partnersRoute = require("./Routes/GastionWebSiteSectionsRoutes/PartnerRoute");
+// const videoRoute = require("./Routes/GastionWebSiteSectionsRoutes/VideoRoute");
+// const faqRoute = require('./Routes/GastionWebSiteSectionsRoutes/FAQRoute');
+// const serviceRoute = require("./Routes/GastionWebSiteSectionsRoutes/ServiceRoute");
+// const reviewRoute = require("./Routes/GastionWebSiteSectionsRoutes/ReviewRoute");
+// const emailListRoute = require('./Routes/GastionWebSiteSectionsRoutes/EmailListRoute');
+// const quoteRoute = require("./Routes/quoteRoute"); // <-- à ajouter
+// const companyRoute = require("./Routes/companyRoute");
+// const galleryRoute = require("./Routes/GastionWebSiteSectionsRoutes/galleryRoute");
+// const newsRoute = require("./Routes/newsRoute");
+// const factureRoute = require ("./Routes/FactureRoute")
 
 
 
@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 //middlwaere :
 
 app.use(cors({
-  origin: [ "http://localhost:3000","http://localhost:3001",'https://nexolia-medica-landing-page.vercel.app',"http://localhost:2000","https://www.expert-demenagement-tunisie.com","https://ala.expert-demenagement-tunisie.com"],
+  origin: [ "http://localhost:3000","http://localhost:3001","https://salon-api.nexolia-consulting.com"],
   methods: ['GET', 'POST','DELETE',"PUT","PATCH"],
   allowedHeaders: ['Content-Type'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -41,25 +41,38 @@ app.use(cors({
 
 // Path routes Nexolia-Medica : 
 app.use('/user/api',authRoute);
-app.use("/visitorAnalytics/api", visitorRoute);
-app.use("/partner/api", partnersRoute);
-app.use("/video/api", videoRoute);
-app.use('/faq/api', faqRoute);
-app.use("/service/api", serviceRoute);
-app.use("/review/api", reviewRoute);
-app.use('/email-list/api', emailListRoute);
-app.use("/quote/api", quoteRoute);
-app.use("/company/api", companyRoute);
-app.use("/gallery/api", galleryRoute);
-app.use("/news/api", newsRoute);
-app.use("/facture/api", factureRoute);
+// app.use("/visitorAnalytics/api", visitorRoute);
+// app.use("/partner/api", partnersRoute);
+// app.use("/video/api", videoRoute);
+// app.use('/faq/api', faqRoute);
+// app.use("/service/api", serviceRoute);
+// app.use("/review/api", reviewRoute);
+// app.use('/email-list/api', emailListRoute);
+// app.use("/quote/api", quoteRoute);
+// app.use("/company/api", companyRoute);
+// app.use("/gallery/api", galleryRoute);
+// app.use("/news/api", newsRoute);
+// app.use("/facture/api", factureRoute);
+
+
 
 
 
 
 //test
 app.get('/', (req, res) => {
-  res.send('✅ Backend Nexolia-Medica opérationnel.');
+
+  const db = getDBStatus();
+
+  res.json({
+    status: "Backend Nexolia-Medica opérationnel ✅",
+    database: {
+      connected: db.connected,
+      message: db.message,
+      serverTime: db.serverTime
+    }
+  });
+
 });
 
 
