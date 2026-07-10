@@ -1,6 +1,4 @@
 const express = require('express');
-const router = express.Router();
-
 const {
   registerVideoCtrl,
   updateVideoCtrl,
@@ -9,31 +7,13 @@ const {
   readAllVideos,
 } = require('../../Controllers/GestionWebSiteSections/VideoController.js');
 
-// Importation du middleware de sécurité (Ajustez le chemin relatif si nécessaire)
-const { verifyTokenAndAdmin } = require('../../Middlewares/verifyToken');
+const router = express.Router();
 
-// ----------------------------------------------------
-// Routes Publiques (Accessibles par tout le monde)
-// ----------------------------------------------------
-
-// Récupérer toutes les vidéos
+router.post('/register', registerVideoCtrl);
 router.get('/all', readAllVideos);
-
-// Récupérer une vidéo spécifique par son ID
 router.get('/:id', readOneVideo);
+router.put('/:id', updateVideoCtrl);
 
-
-// ----------------------------------------------------
-// Routes Privées (Réservées uniquement aux Administrateurs)
-// ----------------------------------------------------
-
-// Ajouter une nouvelle vidéo -> verifyTokenAndAdmin obligatoire
-router.post('/register', verifyTokenAndAdmin, registerVideoCtrl);
-
-// Modifier une vidéo -> verifyTokenAndAdmin obligatoire
-router.put('/:id', verifyTokenAndAdmin, updateVideoCtrl);
-
-// Supprimer une vidéo -> verifyTokenAndAdmin obligatoire
-router.delete('/:id', verifyTokenAndAdmin, deleteVideoCtrl);
+router.delete('/:id', deleteVideoCtrl);
 
 module.exports = router;
