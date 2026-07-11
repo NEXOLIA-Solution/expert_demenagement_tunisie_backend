@@ -1,49 +1,25 @@
-const mysql = require('mysql2');
+const mongoose = require('mongoose');
 require('dotenv').config();
 
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: process.env.DB_PORT || 3306
-});
+// Récupération de l'URL depuis les variables d'environnement
+const dbURI = process.env.DB_Online_URL;
 
-let dbStatus = {
-    connected: false,
-    message: "Not tested yet",
-    serverTime: null
-};
+if (!dbURI) {
+    console.error("❌ Erreur : DB_URL n'est pas définie dans le fichier .env");
+    process.exit(1);
+}
 
-connection.connect((err) => {
-    if (err) {
-        console.error('❌ DB CONNECTION FAILED :', err.message);
-
-        dbStatus = {
-            connected: false,
-            message: err.message,
-            serverTime: null
-        };
-
-        return;
-    }
-
-    console.log('✅ MySQL/MariaDB CONNECTED');
-
-    connection.query('SELECT NOW() AS time', (err, result) => {
-        if (err) return;
-
-        dbStatus = {
-            connected: true,
-            message: "Database connected successfully",
-            serverTime: result[0].time
-        };
-
-        console.log('🟢 DB STATUS READY');
+// Configuration et options de connexion Mongoose
+mongoose.connect(dbURI)
+    .then(() => {
+        // Extraction du type de base pour un affichage propre dans les logs
+        const isAtlas = dbURI.includes('mongodb+srv');
+        console.log(`✅ Connexion réussie à MongoDB (${isAtlas ? 'Atlas / Cloud' : 'Locale'}).`);
+    })
+    .catch((error) => {
+        console.error("❌ Échec de la connexion à la base de données :");
+        console.error(error.message);
+        process.exit(1); // Arrête le serveur si la connexion échoue
     });
-});
 
-module.exports = {
-    connection,
-    getDBStatus: () => dbStatus
-};
+module.exports = mongoose.connection;
